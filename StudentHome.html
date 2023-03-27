@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Student Home</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css">
+
+    <style>
+        .navbar {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        #profileDropdown a {
+            display: block;
+        }
+
+
+        #upcomingSessions {
+            background-color: darkgray;
+            width: 30%;
+            height: 90%;
+            border-radius: 10px;
+            overflow: hidden;
+            position: fixed;
+            top: 10%;
+            bottom: 10%;
+            left: 5%;
+            padding: 20px;
+
+        }
+
+        #tutorList {
+            background-color: lightgray;
+            width: 60%;
+            max-height: 50%;
+            border-radius: 10px;
+            overflow-y: scroll;
+            position: fixed;
+            top: 10%;
+            right: 30px;
+            padding: 20px;
+        }
+
+
+        #tutorListItems {
+            background-color: lightgray;
+            list-style: none;
+        }
+
+        .tutor-container {
+            background-color: darkgray;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            width: 95%;
+            margin-bottom: 30px;
+            height: 130px;
+        }
+
+        .tutor-container img {
+            order: 1;
+            margin-left: 20px;
+        }
+
+        .tutor-container h4 {
+            order: 2;
+            margin-right: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Tutoring Scheduler</a>
+        <button class="navbar-toggler" type="button">
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Item1</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Item2</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Item3</a>
+                </li>
+                <li>
+            </ul>
+            <ul class="nav ms-auto">
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="profileDropdown"
+                        data-bs-toggle="dropdown">
+                        Profile
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" labelledby="profileDropdown">
+                        <li><a class="dropdown-item" href="#">Log In</a></li>
+                        <li><a class="dropdown-item" href="#">Sign Up</a></li>
+                        <li><a class="dropdown-item" href="#">Manage Profile</a></li>
+                    </ul>
+                </div>
+            </ul>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <div class="row" id="mainbody">
+            <div class="col-md-6" id="upcomingSessions">
+                <h2>Upcoming Sessions</h2>
+            </div>
+            <!--Scrollable list of tutors-->
+            <div class="col-md-6" id="tutorList">
+                <h2>Tutors</h2>
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <!--These filters are subject to change-->
+                        <select class="form-select" id="subjectFilter">
+                            <option value="">All Subjects</option>
+                            <!-- add or replace subjects-->
+                            <option value="math">Math</option>
+                            <option value="english">English</option>
+                            <option value="science">Science</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <select class="form-select" id="availabilityFilter">
+                            <option value="">All Availability</option>
+                            <option value="morning">Morning</option>
+                            <option value="afternoon">Afternoon</option>
+                            <option value="evening">Evening</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" placeholder="Search by name" id="nameFilter">
+                    </div>
+                </div>
+                <ul id="tutorListItems"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
+
+    <!--Fills the list of tutors-->
+    <script>
+        function tutorItem(name, picture, subject) {
+            this.name = name;
+            this.picture = picture;
+            this.subject = subject;
+
+        }
+
+        //dummy data
+        var tutorData = [
+            {
+                name: 'Tutor 1',
+                picture: 'https://example.com/tutor1.jpg',
+                subject: 'Math'
+            },
+            {
+                name: 'Tutor 2',
+                picture: 'https://example.com/tutor2.jpg',
+                subject: 'Computer Science'
+            },
+            {
+                name: 'Tutor 2',
+                picture: 'https://example.com/tutor2.jpg',
+                subject: 'Physics'
+            },
+            {
+                name: 'Tutor 3',
+                picture: 'https://example.com/tutor2.jpg',
+                subject: 'Chemistry'
+            },
+            {
+                name: 'Tutor 4',
+                picture: 'https://example.com/tutor2.jpg',
+                subject: 'Economics'
+            },
+
+        ];
+
+        var tutors = tutorData.map(function (data) {
+            return new tutorItem(data.name, data.picture, data.subject);
+        });
+
+        tutors.forEach(function (tutor) {
+            var listItem = $('<li>');
+            var container = $('<div>').addClass('tutor-container');
+            var image = $('<img>').attr('src', tutor.picture);
+            var name = $('<h4>').text(tutor.name);
+            var subject = $('<p>').text(tutor.subject);
+            container.append(name, image, subject);
+            listItem.append(container);
+            $('#tutorListItems').append(listItem);
+        });
+
+    </script>
+</body>
+
+</html>
