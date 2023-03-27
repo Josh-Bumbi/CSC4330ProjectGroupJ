@@ -4,10 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>4330 Team J</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="login.css">
   </head>
   <body>
-	<script type="module" src="js/index.js"></script>
+    <script type="module" src="js/index.js"></script>
+
+    <div class="container" id="container">
+      <div class="form-container sign-up-container">
+        <form action="#">
+          <input type="email" placeholder="Email"/>
+          <input type="password" placeholder="Password"/>
+        </form>
+      </div>
+      <div class="form-container sign-in-container">
+        <form action="#">
+          <h1>Sign in</h1>
+          <div class="social-container"></div>
+          <span>Enter Email and Password</span>
+          <input type="email" placeholder="Email"/>
+          <input type="password" placeholder="Password"/>
+          <button>Sign In</button>
+        </form>
+      </div>
+      <div class="overlay-container">
+        <div class="overlay">
+          <div class="overlay-panel overlay-left">
+            <button class="ghost" id="signIn">Sign In</button>
+          </div>
+          <div class="overlay-panel overlay-right">
+            <h1>Don't have an account?</h1>
+            <button class="ghost" id="signUp" onclick="location.href='signup.html'">Sign Up</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
