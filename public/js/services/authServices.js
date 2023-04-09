@@ -22,7 +22,6 @@ async function createUser(email, password) {
 }
 
 
-//create a function that gets the user id of the current logged in user
 function getCurrentUserId() {
     if (auth.currentUser == null) {
         return null;

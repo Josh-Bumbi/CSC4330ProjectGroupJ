@@ -19,11 +19,14 @@ async function writeUserData(user) {
 }
 
 async function writeAppointmentData(appointment) {
+  if (appointment.appointmentId != null) {
+    throw new Error('Appointment already exists');
+  } 
+  
   const appointmentRef = push(ref(db, 'appointments'));
   const appointmentId = appointmentRef.key;
 
   await set(appointmentRef, {
-    id: appointmentId,
     tutorId: appointment.tutor.userId,
     studentId: appointment.student.userId,
     startTime: appointment.startTime.toISOString(),
@@ -93,7 +96,7 @@ async function getAppointment(appointmentId) {
     const endTime = new Date(appointmentData.endTime);
     const description = appointmentData.description;
 
-    return new Appointment(tutor, student, startTime, endTime, description);
+    return new Appointment(tutor, student, startTime, endTime, description, appointmentId);
   } else {
     throw new Error('Appointment not found');
   }
