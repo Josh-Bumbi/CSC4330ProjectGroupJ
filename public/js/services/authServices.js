@@ -22,6 +22,15 @@ async function createUser(email, password) {
 }
 
 
+//create a function that gets the user id of the current logged in user
+function getCurrentUserId() {
+    if (auth.currentUser == null) {
+        return null;
+    }
+        
+    return auth.currentUser.uid;
+}
+
 // Will return userid if user successfully logged, null if there was an error
 
 
@@ -37,5 +46,5 @@ async function signInUser(email, password) {
 }
 
 
-export {createUser, signInUser};
+export {createUser, signInUser, getCurrentUserId};
 
