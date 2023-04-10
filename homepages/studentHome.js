@@ -1,33 +1,47 @@
-src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
-src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js"
+// src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+// src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js"
+import { getTutors } from "../public/js/Services/databaseServices.js";
 
-        var tutorData = [
-          {
-            name: 'Tutor 1',
-            picture: 'https://example.com/tutor1.jpg',
-            subject: 'math'
-          },
-          {
-            name: 'Tutor 2',
-            picture: 'https://example.com/tutor2.jpg',
-            subject: 'computer science'
-          },
-          {
-            name: 'Tutor 2',
-            picture: 'https://example.com/tutor2.jpg',
-            subject: 'physics'
-          },
-          {
-            name: 'Tutor 3',
-            picture: 'https://example.com/tutor2.jpg',
-            subject: 'chemistry'
-          },
-          {
-            name: 'Tutor 4',
-            picture: 'https://example.com/tutor2.jpg',
-            subject: 'economics'
-          }
-        ];
+        // var tutorData = [
+        //   {
+        //     name: 'Tutor 1',
+        //     picture: 'https://example.com/tutor1.jpg',
+        //     subject: 'math'
+        //   },
+        //   {
+        //     name: 'Tutor 2',
+        //     picture: 'https://example.com/tutor2.jpg',
+        //     subject: 'computer science'
+        //   },
+        //   {
+        //     name: 'Tutor 2',
+        //     picture: 'https://example.com/tutor2.jpg',
+        //     subject: 'physics'
+        //   },
+        //   {
+        //     name: 'Tutor 3',
+        //     picture: 'https://example.com/tutor2.jpg',
+        //     subject: 'chemistry'
+        //   },
+        //   {
+        //     name: 'Tutor 4',
+        //     picture: 'https://example.com/tutor2.jpg',
+        //     subject: 'economics'
+        //   }
+        // ];
+        var tutorData = [];
+        var tutors = await getTutors();
+        
+        tutors.forEach(function(tutor) {
+            console.log(tutor)
+            tutorData.push({
+                'name': tutor.name,
+                'picture': '',
+                'subject': tutor.major,
+            })
+        })
+        console.log(tutorData)
+
       
         var subjectFilter = document.getElementById("subjectFilter");
         subjectFilter.addEventListener("change", filterTutors);
@@ -35,7 +49,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap
         function filterTutors() {
           var selectedSubject = subjectFilter.value;
           var filteredTutors = tutorData.filter(function(tutor) {
-            return selectedSubject === "all subjects" || tutor.subject.trim() === selectedSubject.trim();
+            return selectedSubject === "all subjects" || tutor.subject === selectedSubject;
           });
       
           $('#tutorListItems').empty(); // clear previous list items
