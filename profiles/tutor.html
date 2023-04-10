@@ -8,12 +8,11 @@
     <title>Tutor Profile</title>
     <link rel="stylesheet" href="profilestyles.css">
 </head>
+<script src="tutor.js"></script>
 <body>
-    <p class="name">John Michael Doe</p>
+    <p class="name" id="name"></p>
     <p class="title">Tutor</p>
-    <p class="area">Computer Science</p>
-    <p class="area">Statistics</p>
-    <p class="area">Calculus</p>
+    <p class="area" id="major"></p>
     <p class="title">Available Times</p>
     <p class="weekday">Monday</p>
     <p class="times">11:30 AM - 2:30 PM</p>
@@ -25,7 +24,8 @@
     <p class="times">11:30 AM - 2:30 PM</p>
     <p class="weekday">Friday</p>
     <p class="times">11:30 AM - 2:30 PM</p>
-    <button type="button" onclick="alert('This would take you to the previous page.')">← Go Back</button>
+    <button type="button" class="button" onclick="alert('This would take you to the previous page.')">← Go Back</button>
+    <button type="button" class="button2" onclick="alert('This would take you to the scheduling page.')">Schedule Session</button>
     
 </body>
 </html>

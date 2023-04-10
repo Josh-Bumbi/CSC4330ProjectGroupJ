@@ -41,11 +41,20 @@
 html {
     border: 1em solid #00E17E;
 }
-button {
+.button {
     background-color: #00E17E;
     color: white;
     text-align: center;
     font-size: 1em;
     font-style: bold;
     font-family: Arial, Helvetica, sans-serif;
+}
+.button2 {
+    background-color: #00E17E;
+    color: white;
+    text-align: center;
+    font-size: 1em;
+    font-style: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    float: right;
 }
