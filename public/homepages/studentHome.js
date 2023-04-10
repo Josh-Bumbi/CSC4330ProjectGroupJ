@@ -32,7 +32,7 @@ import { getTutors } from "../js/Services/databaseServices.js";
             var container = $('<div>').addClass('tutor-container');
             var image = $('<img>').attr('src', tutor.picture);
             // link on name will bring the student to the tutor's profile 
-            var nameLink = $('<a>').attr('href', '').text(tutor.name);
+            var nameLink = $('<a>').attr('href', '../profiles/tutor.html').text(tutor.name);
             var name = $('<h4>').append(nameLink);
             var subject = $('<p>').text(tutor.subject);
             container.append(image, name, subject);
