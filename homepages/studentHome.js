@@ -5,27 +5,27 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap
           {
             name: 'Tutor 1',
             picture: 'https://example.com/tutor1.jpg',
-            subject: 'Math'
+            subject: 'math'
           },
           {
             name: 'Tutor 2',
             picture: 'https://example.com/tutor2.jpg',
-            subject: 'Computer Science'
+            subject: 'computer science'
           },
           {
             name: 'Tutor 2',
             picture: 'https://example.com/tutor2.jpg',
-            subject: 'Physics'
+            subject: 'physics'
           },
           {
             name: 'Tutor 3',
             picture: 'https://example.com/tutor2.jpg',
-            subject: 'Chemistry'
+            subject: 'chemistry'
           },
           {
             name: 'Tutor 4',
             picture: 'https://example.com/tutor2.jpg',
-            subject: 'Economics'
+            subject: 'economics'
           }
         ];
       
