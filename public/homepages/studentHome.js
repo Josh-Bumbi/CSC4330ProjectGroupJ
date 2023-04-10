@@ -1,6 +1,6 @@
 // src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
 // src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js"
-import { getTutors } from "../public/js/Services/databaseServices.js";
+import { getTutors } from "../js/Services/databaseServices.js";
 
         var tutorData = [];
         var tutors = await getTutors();
