@@ -36,9 +36,9 @@
         #notificationList {
             background-color: lightgray;
             width: 60%;
-            max-height: 50%;
+            max-height: 30%;
             border-radius: 10px;
-            overflow-y: scroll;
+            overflow: scroll;
             position: fixed;
             top: 10%;
             right: 30px;
@@ -47,7 +47,7 @@
 
 
         .notification-container {
-            background-color: darkgray;
+            background-color: #f2f2f2;
             border-radius: 10px;
             display: flex;
             flex-direction: column;
@@ -55,8 +55,11 @@
             align-items: center;
             width: 85%;
             height: 100px;
-            margin: 10px;
+            margin: 20px;
+            padding: 20px;
             position: relative;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: scroll;
         }
 
         #notificationListItems {
@@ -83,6 +86,9 @@
             top: 0;
             left: 0;
             padding: 10px;
+            font-size: 14px;
+            color: #555;
+            text-transform: uppercase;
         }
     </style>
 </head>
@@ -179,7 +185,28 @@
                     subject: 'Math',
                     time: 'W 4/7 12:00-1:00',
                 },
-            ];
+                {
+                    type: 'Session Request',
+                    picture: 'https://example.com/tutor2.jpg',
+                    name: 'Student 5',
+                    subject: 'English',
+                    time: 'M 4/5 10:00-11:00',
+                },
+                {
+                    type: 'Session Request',
+                    picture: 'https://example.com/tutor2.jpg',
+                    name: 'Student 6',
+                    subject: 'Biology',
+                    time: 'T 4/6 3:00-4:00',
+                },
+                {
+                    type: 'Session Request',
+                    picture: 'https://example.com/tutor3.jpg',
+                    name: 'Student 7',
+                    subject: 'Chemistry',
+                    time: 'W 4/7 10:00-11:00',
+                },
+            ]
 
             var notifications = notificationData.map(function (data) {
                 return new Notification(data.type, data.picture, data.name, data.subject, data.time);
@@ -192,6 +219,8 @@
                 var type = $('<p>').text(notification.type);
                 var name = $('<h4>').text(notification.name);
                 var subject = $('<p>').text(notification.subject);
+                var acceptButton = $('<button class="btn btn-success accept-btn">').html('Accept');
+                var rejectButton = $('<button class="btn btn-success reject-btn">').html('Reject');
                 container.append(type, name, image, subject);
                 listItem.append(container);
                 $('#notificationListItems').append(listItem);

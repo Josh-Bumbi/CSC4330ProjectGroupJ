@@ -56,7 +56,7 @@
             border-radius: 10px;
             display: flex;
             flex-direction: row;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
             width: 95%;
             margin-bottom: 30px;
@@ -70,6 +70,10 @@
 
         .tutor-container h4 {
             order: 2;
+            margin-right: 20px;
+        }
+        .tutor-container p {
+            order: 3;
             margin-right: 20px;
         }
     </style>
@@ -190,13 +194,15 @@
             return new tutorItem(data.name, data.picture, data.subject);
         });
 
+
         tutors.forEach(function (tutor) {
             var listItem = $('<li>');
             var container = $('<div>').addClass('tutor-container');
             var image = $('<img>').attr('src', tutor.picture);
             var name = $('<h4>').text(tutor.name);
             var subject = $('<p>').text(tutor.subject);
-            container.append(name, image, subject);
+            var requestButton = $('<div>').addClass('dropdown');
+            container.append(image, name, subject, requestButton);
             listItem.append(container);
             $('#tutorListItems').append(listItem);
         });
