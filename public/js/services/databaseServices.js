@@ -90,8 +90,8 @@ async function getAppointment(appointmentId) {
 
   if (snapshot.exists()) {
     const appointmentData = snapshot.val();
-    const tutor = await getCurrentUser(appointmentData.tutorId);
-    const student = await getCurrentUser(appointmentData.studentId);
+    const tutor = appointmentData.tutorId;
+    const student = appointmentData.studentId;
     const startTime = new Date(appointmentData.startTime);
     const endTime = new Date(appointmentData.endTime);
     const description = appointmentData.description;
@@ -117,7 +117,6 @@ async function getUserAppointments(userId) {
     query(appointmentsRef, orderByChild('studentId'), equalTo(userId))
   );
   const studentAppointments = snapshot2.exists() ? snapshot2.val() : {};
-
   //unpack values to combine into one object
   const combinedAppointments = { ...tutorAppointments, ...studentAppointments };
   const userAppointments = [];
@@ -127,8 +126,32 @@ async function getUserAppointments(userId) {
     const appointment = await getAppointment(appointmentId);
     userAppointments.push(appointment);
   }
-
   return userAppointments;
 }
 
-export {writeUserData, writeAppointmentData, getCurrentUser, getUser};
+async function getTutors() {
+  const tutors = [];
+  const userRef = ref(db, 'users');
+
+  const snapshot = await get(
+    query(userRef, orderByChild('userType'), equalTo(UserType.TUTOR))
+  )
+
+  console.log("Hello there")
+  if (snapshot.exists()) {
+    const userData = snapshot.val();
+    console.log(userData)
+    for (const userId in userData) {
+      console.log(userId)
+      const tutor = await getUser(userId);
+      console.log(tutor)
+      tutors.push(tutor);
+    
+    }
+  }
+
+  return tutors;
+}
+
+
+export {writeUserData, writeAppointmentData, getCurrentUser, getUser, getTutors};
