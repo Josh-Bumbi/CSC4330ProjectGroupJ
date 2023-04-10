@@ -2,33 +2,6 @@
 // src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js"
 import { getTutors } from "../public/js/Services/databaseServices.js";
 
-        // var tutorData = [
-        //   {
-        //     name: 'Tutor 1',
-        //     picture: 'https://example.com/tutor1.jpg',
-        //     subject: 'math'
-        //   },
-        //   {
-        //     name: 'Tutor 2',
-        //     picture: 'https://example.com/tutor2.jpg',
-        //     subject: 'computer science'
-        //   },
-        //   {
-        //     name: 'Tutor 2',
-        //     picture: 'https://example.com/tutor2.jpg',
-        //     subject: 'physics'
-        //   },
-        //   {
-        //     name: 'Tutor 3',
-        //     picture: 'https://example.com/tutor2.jpg',
-        //     subject: 'chemistry'
-        //   },
-        //   {
-        //     name: 'Tutor 4',
-        //     picture: 'https://example.com/tutor2.jpg',
-        //     subject: 'economics'
-        //   }
-        // ];
         var tutorData = [];
         var tutors = await getTutors();
         
