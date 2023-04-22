@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     if (user) {
         // Update the profile button text
-        profileButton.textContent = user.name;
+        // profileButton.textContent = user.name;
 
         // Update the dropdown menu
         dropdownMenu.innerHTML = `
@@ -26,7 +26,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         dropdownMenu.innerHTML = `
             <li><a class="dropdown-item" href="#">Log In</a></li>
             <li><a class="dropdown-item" href="#">Sign Up</a></li>
-            <li><a class="dropdown-item" href="#">Manage Profile</a></li>
         `;
     }
 });
