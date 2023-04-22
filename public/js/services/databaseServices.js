@@ -42,7 +42,7 @@ async function writeAppointmentData(appointment) {
 async function getCurrentUser() {
   var userId = getCurrentUserId();
   if (userId == null) {
-    throw new Error('No user logged in');
+    return null;
   }
   return getUser(userId);
 
