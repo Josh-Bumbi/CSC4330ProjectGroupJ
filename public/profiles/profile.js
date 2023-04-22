@@ -1,4 +1,4 @@
-import { getUser } from "../public/js/Services/databaseServices.js";
+import { getUser } from "../public/js/services/databaseServices.js";
 import { User } from "../public/js/model/user.js";
 
 getUser("qJ6ipz12ooMlIjkuDYqtnxTD6su2").then((user) => {

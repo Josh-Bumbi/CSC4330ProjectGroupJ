@@ -137,14 +137,11 @@ async function getTutors() {
     query(userRef, orderByChild('userType'), equalTo(UserType.TUTOR))
   )
 
-  console.log("Hello there")
   if (snapshot.exists()) {
     const userData = snapshot.val();
     console.log(userData)
     for (const userId in userData) {
-      console.log(userId)
       const tutor = await getUser(userId);
-      console.log(tutor)
       tutors.push(tutor);
     
     }

@@ -1,4 +1,4 @@
-import {writeAppointmentData} from '../Services/databaseServices.js';
+import {writeAppointmentData} from '../services/databaseServices.js';
 
 
 const UserType = {
