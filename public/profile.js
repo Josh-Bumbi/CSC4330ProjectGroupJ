@@ -1,15 +1,21 @@
-import { getUser,getCurrentUser } from "../public/js/services/databaseServices.js";
+import { getUser,getCurrentUser } from "./js/services/databaseServices.js";
+import { signInUser } from "./js/services/authServices.js";
 
-var student;
+var viewer;
+
+document.getElementById('makeApt').hidden = true;
 
 // TESTING
-signInUser("student1@lsu.edu", "Password12345!").then((userId) => {
+signInUser("tutor1@lsu.edu", "Password12345!").then((userId) => {
 	console.log(userId.uid)
 	getCurrentUser().then((user) => {
-		student = user;
+		viewer = user;
         console.log(user);
-        var userType = user.userType;
-        
+        var currentUserType = user.userType;
+        if (currentUserType == "student") {
+            document.getElementById('makeApt').hidden = false;
+        }
+        console.log(currentUserType); 
 	})
 
 });
