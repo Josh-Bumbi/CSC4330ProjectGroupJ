@@ -1,20 +1,66 @@
+import { getCurrentUser, getNotifications, getAppointment, getUser } from "./services/databaseServices.js";
 
-//regular notification with just text
-function createTextNotification(text) {
+
+
+var user;
+
+async function createNotificationInfo(appointment) {
+    console.log(appointment)
+
+    const student = await getUser(appointment.student);
+
+    const info = document.createElement('div');
+    info.classList.add('notification-info', 'mb-2');
+
+    var endDate = new Date(appointment.endTime);
+    var endHour = endDate.getHours();
+    var endMinute = endDate.getMinutes();
+    if (endMinute < 10) {
+        endMinute = "0" + endMinute;
+    }
+
+    var startDate = new Date(appointment.startTime);
+    var startHour = startDate.getHours();
+    var startMinute = startDate.getMinutes();
+    if (startMinute < 10) {
+        startMinute = "0" + startMinute;
+    }
+
+
+    info.innerHTML = `
+        <strong>${student.name}</strong><br>
+        Date: ${startDate.toDateString()}<br>
+        Time: ${startHour}:${startMinute} - ${endHour}:${endMinute}<br>
+    `;
+    return info;
+}
+
+function createTextNotification(text, name, date, startTime, endTime) {
     const notification = document.createElement('div');
-    notification.classList.add('notification', 'text-notification', 'alert', 'alert-secondary');
-    notification.textContent = text;
+    notification.classList.add('notification', 'text-notification', 'alert', 'alert-secondary', 'd-flex', 'flex-column', 'gap-3');
+
+    const notificationInfo = createNotificationInfo(name, date, startTime, endTime);
+    notification.appendChild(notificationInfo);
+
+    const notificationText = document.createElement('p');
+    notificationText.textContent = text;
+    notification.appendChild(notificationText);
+
     return notification;
 }
 
 
-//notification for a tutor to accept an appointment
-function createAcceptanceNotification(text) {
+async function createAcceptanceNotification(notificationData, appointment) {
     const notification = document.createElement('div');
     notification.classList.add('notification', 'acceptance-notification', 'alert', 'alert-info', 'd-flex', 'flex-column', 'gap-3');
 
+
+
+    const notificationInfo = await createNotificationInfo(appointment);
+    notification.appendChild(notificationInfo);
+
     const notificationText = document.createElement('p');
-    notificationText.textContent = text;
+    notificationText.textContent = notificationData.message;
     notification.appendChild(notificationText);
 
     const messageInput = document.createElement('input');
@@ -42,9 +88,12 @@ function createAcceptanceNotification(text) {
 }
 
 //notification for a student to rate and review a tutor
-function createRateAndReviewNotification(text) {
+async function createRateAndReviewNotification(text, name, date, startTime, endTime) {
     const notification = document.createElement('div');
     notification.classList.add('notification', 'rate-review-notification', 'alert', 'alert-warning', 'd-flex', 'flex-column', 'gap-3', 'align-items-center');
+
+    const notificationInfo = await createNotificationInfo(name, date, startTime, endTime);
+    notification.appendChild(notificationInfo);
 
     const notificationText = document.createElement('p');
     notificationText.textContent = text;
@@ -75,26 +124,26 @@ function createRateAndReviewNotification(text) {
     return notification;
 }
 
-function displayNotifications() {
+async function displayNotifications() {
     const notificationsContainer = document.getElementById('notifications');
 
-    //Test notifs
-    const notificationsData = [
-        { type: 'text', text: 'Test Tutor Accepted your appointment' },
-        { type: 'acceptance', text: 'New appointment request from Test Tutor.' },
-        { type: 'text', text: 'You have a new message.' },
-        { type: 'acceptance', text: 'New appointment request from Jane Smith.' },
-        { type: 'rateAndReview', text: 'Please rate and review your appointment with Tutor Name.' }
-    ];
+    user = getCurrentUser();
 
-    notificationsData.forEach(notificationData => {
+    //Get notifications from database
+    const notificationsData = await getNotifications("lFHl9aurtdXoY8Ta0n0tQ3hzDEq1");
+
+    console.log(notificationsData)
+
+
+    notificationsData.forEach(async notificationData => {
         let notification;
+        const appointment = await getAppointment(notificationData.appointmentId);
         if (notificationData.type === 'text') {
             notification = createTextNotification(notificationData.text);
-        } else if (notificationData.type === 'acceptance') {
-            notification = createAcceptanceNotification(notificationData.text);
-        } else if (notificationData.type === 'rateAndReview') {
-            notification = createRateAndReviewNotification(notificationData.text);
+        } else if (notificationData.type === 'accept') {
+            notification = await createAcceptanceNotification(notificationData, appointment);
+        } else if (notificationData.type === 'review') {
+            notification = await createRateAndReviewNotification(notificationData.text);
         }
 
         notificationsContainer.appendChild(notification);

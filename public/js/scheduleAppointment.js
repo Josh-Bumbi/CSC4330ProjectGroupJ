@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             const appointment = new Appointment(tutor, student, startTime, endTime, description);
             
             student.addAppointment(appointment).then(() => {
-                window.location.href = 'success.html';
+                // window.location.href = 'success.html';
             });
     
             
