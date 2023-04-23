@@ -14,7 +14,6 @@ signInUser("student1@lsu.edu", "Password12345!").then((userId) => {
         }
         console.log(currentUserType); 
 	})
-
 });
 //END TESTING
 
@@ -24,5 +23,3 @@ getUser("qJ6ipz12ooMlIjkuDYqtnxTD6su2").then((user) => {
     document.getElementById('major').innerHTML = userMajor;
     document.getElementById('name').innerHTML = userName;
 })
-
-
