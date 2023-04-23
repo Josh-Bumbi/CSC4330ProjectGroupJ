@@ -1,16 +1,16 @@
-import { getCurrentUser, getNotifications, getAppointment, getUser, updateAppointmentData, updateNotificationData, writeNotificationData } from "./services/databaseServices.js";
+import { deleteNotification, writeReviewData, getCurrentUser, getNotifications, getAppointment, getUser, updateAppointmentData, updateNotificationData, writeNotificationData } from "./services/databaseServices.js";
 import { Notification } from "./model/notification.js";
-
+import { Review} from "./model/review.js";
 
 var user;
 
-async function createNotificationInfo(student, startDate, startHour, startMinute, endHour, endMinute) {
+async function createNotificationInfo(user, startDate, startHour, startMinute, endHour, endMinute) {
 
     const info = document.createElement('div');
     info.classList.add('notification-info', 'mb-2');
 
     info.innerHTML = `
-        <strong>${student.name}</strong><br>
+        <strong>${user.name}</strong><br>
         Date: ${startDate.toDateString()}<br>
         Time: ${startHour}:${startMinute} - ${endHour}:${endMinute}<br>
     `;
@@ -69,8 +69,6 @@ async function createAcceptanceNotification(notificationData, appointment) {
     if (startMinute < 10) {
         startMinute = "0" + startMinute;
     }
-
-
 
 
 
@@ -167,15 +165,33 @@ async function createAcceptanceNotification(notificationData, appointment) {
 }
 
 //notification for a student to rate and review a tutor
-async function createRateAndReviewNotification(text, name, date, startTime, endTime) {
+async function createRateAndReviewNotification(notificationData, appointment) {
     const notification = document.createElement('div');
     notification.classList.add('notification', 'rate-review-notification', 'alert', 'alert-warning', 'd-flex', 'flex-column', 'gap-3', 'align-items-center');
+    
+    //Get student and appointment info
+    const student = await getUser(appointment.student);
+    var endDate = new Date(appointment.endTime);
+    var endHour = endDate.getHours();
+    var endMinute = endDate.getMinutes();
+    if (endMinute < 10) {
+        endMinute = "0" + endMinute;
+    }
 
-    const notificationInfo = await createNotificationInfo(name, date, startTime, endTime);
+    var startDate = new Date(appointment.startTime);
+    var startHour = startDate.getHours();
+    var startMinute = startDate.getMinutes();
+    if (startMinute < 10) {
+        startMinute = "0" + startMinute;
+    }
+
+
+
+    const notificationInfo = await createNotificationInfo(student, startDate, startHour, startMinute, endHour, endMinute);
     notification.appendChild(notificationInfo);
 
     const notificationText = document.createElement('p');
-    notificationText.textContent = text;
+    notificationText.textContent = notificationData.message;
     notification.appendChild(notificationText);
 
     const rating = document.createElement('div');
@@ -199,6 +215,33 @@ async function createRateAndReviewNotification(text, name, date, startTime, endT
     submitButton.textContent = 'Submit review';
     submitButton.classList.add('btn', 'btn-primary');
     notification.appendChild(submitButton);
+
+
+    // Inside createRateAndReviewNotification
+    submitButton.addEventListener('click', async () => {
+        const selectedRating = rating.querySelector('input:checked');
+        const numberOfStars = selectedRating ? parseInt(selectedRating.id.replace('rating', '')) : 0;
+        const reviewText = reviewInput.value;
+        
+        console.log(`Submit review clicked for appointment ${appointment.appointmentId}`);
+        console.log(`Stars: ${numberOfStars}`);
+        console.log(`Review: ${reviewText}`);
+
+        // create and submit review
+        const review = new Review(appointment.student, appointment.tutor, reviewText, numberOfStars);
+        await writeReviewData(review);
+
+        //delete this notification
+        await deleteNotification(notificationData.id);
+
+        location.reload();
+
+        //create text notification for tutor
+
+    });
+
+
+
 
     return notification;
 }

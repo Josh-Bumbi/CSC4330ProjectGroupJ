@@ -93,6 +93,26 @@ async function writeNotificationData(notification) {
   return notifId;
 }
 
+async function deleteNotification(notifId) {
+  const notifRef = ref(db, `notifications/${notifId}`);
+  return set(notifRef, null);
+}
+
+
+async function writeReviewData(review) {
+  const reviewRef = push(ref(db, 'reviews'));
+  const reviewId = reviewRef.key;
+
+  await set(reviewRef, {
+    reviewer: review.reviewerId,
+    reviewed: review.reviewedId,
+    message: review.message,
+    stars: review.stars
+  });
+
+  return reviewId;
+}
+
 async function getUser(userId) {
   const userRef = ref(db, 'users/' + userId);
   const snapshot = await get(userRef);
@@ -149,7 +169,6 @@ async function getAppointment(appointmentId) {
 
 
 
-
 async function getNotification(notifId) {
   const notifRef = ref(db, 'notifications/' + notifId);
   const snapshot = await get(notifRef);
@@ -167,8 +186,6 @@ async function getNotification(notifId) {
     throw new Error('Notification not found');
   }
 }
-
-
 
 
 
@@ -233,4 +250,4 @@ async function getTutors() {
 }
 
 
-export {writeUserData, writeAppointmentData, writeNotificationData, getNotifications, getCurrentUser, getUser, getTutors, getAppointment, updateAppointmentData, updateNotificationData};
+export { deleteNotification, writeUserData, writeAppointmentData, writeNotificationData, getNotifications, getCurrentUser, getUser, getTutors, getAppointment, updateAppointmentData, updateNotificationData, writeReviewData};
