@@ -1,5 +1,5 @@
 import app from "./firebaseConfig.js";
-import {getDatabase, ref, set, push, get, orderByChild, equalTo, query} from "https://www.gstatic.com/firebasejs/9.18.0/firebase-database.js";
+import {getDatabase, ref, set, push, get, orderByChild, equalTo, query, update} from "https://www.gstatic.com/firebasejs/9.18.0/firebase-database.js";
 import {getCurrentUserId} from "./authServices.js";
 import {User, UserType, Admin, Student, Tutor} from "../model/user.js";
 import {Appointment} from "../model/appointment.js";
@@ -38,6 +38,36 @@ async function writeAppointmentData(appointment) {
 
   return appointmentId;
 }
+
+async function updateAppointmentData(appointmentId, updatedData) {
+  if (!appointmentId) {
+    throw new Error('Appointment ID is required');
+  }
+
+  const appointmentRef = ref(db, `appointments/${appointmentId}`);
+
+  // Convert Date objects to ISO strings for storage
+  if (updatedData.startTime) {
+    updatedData.startTime = updatedData.startTime.toISOString();
+  }
+  if (updatedData.endTime) {
+    updatedData.endTime = updatedData.endTime.toISOString();
+  }
+
+  await update(appointmentRef, updatedData);
+}
+
+
+async function updateNotificationData(notifId, updatedData) {
+  if (!notifId) {
+    throw new Error('Notification ID is required');
+  }
+
+  const notifRef = ref(db, `notifications/${notifId}`);
+
+  await update(notifRef, updatedData);
+}
+
 
 
 
@@ -132,7 +162,7 @@ async function getNotification(notifId) {
     const status = notifData.status;
     const type = notifData.type;
 
-    return new Notification(appointmentId, recipient, message, type, status);
+    return new Notification(appointmentId, recipient, message, type, status, notifId);
   } else {
     throw new Error('Notification not found');
   }
@@ -203,4 +233,4 @@ async function getTutors() {
 }
 
 
-export {writeUserData, writeAppointmentData, writeNotificationData, getNotifications, getCurrentUser, getUser, getTutors, getAppointment};
+export {writeUserData, writeAppointmentData, writeNotificationData, getNotifications, getCurrentUser, getUser, getTutors, getAppointment, updateAppointmentData, updateNotificationData};

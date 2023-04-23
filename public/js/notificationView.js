@@ -1,17 +1,61 @@
-import { getCurrentUser, getNotifications, getAppointment, getUser } from "./services/databaseServices.js";
-
+import { getCurrentUser, getNotifications, getAppointment, getUser, updateAppointmentData, updateNotificationData, writeNotificationData } from "./services/databaseServices.js";
+import { Notification } from "./model/notification.js";
 
 
 var user;
 
-async function createNotificationInfo(appointment) {
-    console.log(appointment)
-
-    const student = await getUser(appointment.student);
+async function createNotificationInfo(student, startDate, startHour, startMinute, endHour, endMinute) {
 
     const info = document.createElement('div');
     info.classList.add('notification-info', 'mb-2');
 
+    info.innerHTML = `
+        <strong>${student.name}</strong><br>
+        Date: ${startDate.toDateString()}<br>
+        Time: ${startHour}:${startMinute} - ${endHour}:${endMinute}<br>
+    `;
+    return info;
+}
+
+async function createTextNotification(notificationData, appointment) {
+    const notification = document.createElement('div');
+    notification.classList.add('notification', 'text-notification', 'alert', 'alert-secondary', 'd-flex', 'flex-column', 'gap-3');
+
+     //Get student and appointment info
+     const student = await getUser(appointment.student);
+     var endDate = new Date(appointment.endTime);
+     var endHour = endDate.getHours();
+     var endMinute = endDate.getMinutes();
+     if (endMinute < 10) {
+         endMinute = "0" + endMinute;
+     }
+ 
+     var startDate = new Date(appointment.startTime);
+     var startHour = startDate.getHours();
+     var startMinute = startDate.getMinutes();
+     if (startMinute < 10) {
+         startMinute = "0" + startMinute;
+     }
+ 
+     const notificationInfo = await createNotificationInfo(student, startDate, startHour, startMinute, endHour, endMinute);
+     notification.appendChild(notificationInfo);
+
+
+    const notificationText = document.createElement('p');
+    notificationText.textContent = notificationData.message;
+    notification.appendChild(notificationText);
+
+    return notification;
+}
+
+
+async function createAcceptanceNotification(notificationData, appointment) {
+    const notification = document.createElement('div');
+    notification.classList.add('notification', 'acceptance-notification', 'alert', 'alert-info', 'd-flex', 'flex-column', 'gap-3');
+
+
+    //Get student and appointment info
+    const student = await getUser(appointment.student);
     var endDate = new Date(appointment.endTime);
     var endHour = endDate.getHours();
     var endMinute = endDate.getMinutes();
@@ -27,36 +71,10 @@ async function createNotificationInfo(appointment) {
     }
 
 
-    info.innerHTML = `
-        <strong>${student.name}</strong><br>
-        Date: ${startDate.toDateString()}<br>
-        Time: ${startHour}:${startMinute} - ${endHour}:${endMinute}<br>
-    `;
-    return info;
-}
-
-function createTextNotification(text, name, date, startTime, endTime) {
-    const notification = document.createElement('div');
-    notification.classList.add('notification', 'text-notification', 'alert', 'alert-secondary', 'd-flex', 'flex-column', 'gap-3');
-
-    const notificationInfo = createNotificationInfo(name, date, startTime, endTime);
-    notification.appendChild(notificationInfo);
-
-    const notificationText = document.createElement('p');
-    notificationText.textContent = text;
-    notification.appendChild(notificationText);
-
-    return notification;
-}
-
-
-async function createAcceptanceNotification(notificationData, appointment) {
-    const notification = document.createElement('div');
-    notification.classList.add('notification', 'acceptance-notification', 'alert', 'alert-info', 'd-flex', 'flex-column', 'gap-3');
 
 
 
-    const notificationInfo = await createNotificationInfo(appointment);
+    const notificationInfo = await createNotificationInfo(student, startDate, startHour, startMinute, endHour, endMinute);
     notification.appendChild(notificationInfo);
 
     const notificationText = document.createElement('p');
@@ -81,6 +99,67 @@ async function createAcceptanceNotification(notificationData, appointment) {
     declineButton.textContent = 'Decline Appointment';
     declineButton.classList.add('btn', 'btn-danger');
     buttons.appendChild(declineButton);
+
+
+
+    acceptButton.addEventListener('click', async () => {
+        const message = messageInput.value;
+        if (message === '') {
+            alert('Please enter a message');
+            return;
+        }
+
+        //need to update appointment status to accepted and create a text notification for the student
+        await updateAppointmentData(appointment.appointmentId, { status: 'accepted' });
+        await updateNotificationData(notificationData.id, { status: 'accepted' });
+
+        var messageText = `${user.name} has accepted your appointment on ${startDate.toDateString()} at ${startHour}:${startMinute} - ${endHour}:${endMinute}.  Message: ${message}.`;
+
+        var notif = new Notification(appointment.appointmentId, "lFHl9aurtdXoY8Ta0n0tQ3hzDEq1", messageText, 'text', 'unread');
+  
+        await writeNotificationData(notif);
+
+
+        location.reload();
+
+    });
+    
+    declineButton.addEventListener('click', async () => {
+        const message = messageInput.value;
+        if (message === '') {
+            alert('Please enter a message');
+            return;
+        }
+        console.log(`Decline Appointment clicked for appointment ${appointment.student}`);
+        await updateAppointmentData(appointment.appointmentId, { status: 'declined' });
+        await updateNotificationData(notificationData.id, { status: 'declined' });
+
+        
+        var messageText = `${user.name} has declined your appointment on ${startDate.toDateString()} at ${startHour}:${startMinute} - ${endHour}:${endMinute}.  Message: ${message}.`;
+
+        var notif = new Notification(appointment.appointmentId, "lFHl9aurtdXoY8Ta0n0tQ3hzDEq1", messageText, 'text', 'unread');
+  
+        await writeNotificationData(notif);
+
+        location.reload();
+    });
+
+
+    if (notificationData.status === 'accepted') {
+        acceptButton.disabled = true;
+        declineButton.disabled = true;
+        notification.classList.add('accepted');
+        notificationText.textContent += ' (Accepted)';
+    } else if (notificationData.status === 'declined') {
+        acceptButton.disabled = true;
+        declineButton.disabled = true;
+        notification.classList.add('declined');
+        notificationText.textContent += ' (Declined)';
+    }
+    
+
+
+
     
     notification.appendChild(buttons);
 
@@ -132,18 +211,17 @@ async function displayNotifications() {
     //Get notifications from database
     const notificationsData = await getNotifications("lFHl9aurtdXoY8Ta0n0tQ3hzDEq1");
 
-    console.log(notificationsData)
 
 
     notificationsData.forEach(async notificationData => {
         let notification;
         const appointment = await getAppointment(notificationData.appointmentId);
         if (notificationData.type === 'text') {
-            notification = createTextNotification(notificationData.text);
+            notification = await createTextNotification(notificationData, appointment);
         } else if (notificationData.type === 'accept') {
             notification = await createAcceptanceNotification(notificationData, appointment);
         } else if (notificationData.type === 'review') {
-            notification = await createRateAndReviewNotification(notificationData.text);
+            notification = await createRateAndReviewNotification(notificationData, appointment);
         }
 
         notificationsContainer.appendChild(notification);
