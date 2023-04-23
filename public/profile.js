@@ -6,11 +6,10 @@ var viewer;
 document.getElementById('makeApt').hidden = true;
 
 // TESTING
-signInUser("tutor1@lsu.edu", "Password12345!").then((userId) => {
+signInUser("student1@lsu.edu", "Password12345!").then((userId) => {
 	console.log(userId.uid)
 	getCurrentUser().then((user) => {
 		viewer = user;
-        console.log(user);
         var currentUserType = user.userType;
         if (currentUserType == "student") {
             document.getElementById('makeApt').hidden = false;
