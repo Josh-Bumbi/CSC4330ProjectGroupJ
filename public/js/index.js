@@ -1,4 +1,4 @@
-import { User, UserType } from "/model/user.js";
+import { User, UserType } from "./model/user.js";
 import { writeUserData, getCurrentUser, getUser, getTutors} from "./services/databaseServices.js";
 import {Appointment} from "./model/appointment.js";
 const signUpButton = document.getElementById('signUp');
