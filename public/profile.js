@@ -3,8 +3,6 @@ import { signInUser } from "./js/services/authServices.js";
 
 var viewer;
 
-document.getElementById('makeApt').hidden = true;
-
 // TESTING
 signInUser("student1@lsu.edu", "Password12345!").then((userId) => {
 	console.log(userId.uid)
