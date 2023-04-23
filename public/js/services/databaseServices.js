@@ -1,8 +1,9 @@
 import app from "./firebaseConfig.js";
-import {getDatabase, ref, set, push, get, orderByChild, equalTo, query} from "https://www.gstatic.com/firebasejs/9.18.0/firebase-database.js";
+import {getDatabase, ref, set, push, get, orderByChild, equalTo, query, update} from "https://www.gstatic.com/firebasejs/9.18.0/firebase-database.js";
 import {getCurrentUserId} from "./authServices.js";
 import {User, UserType, Admin, Student, Tutor} from "../model/user.js";
 import {Appointment} from "../model/appointment.js";
+import {Notification} from "../model/notification.js";
 
 const db = getDatabase(app);
 
@@ -31,22 +32,85 @@ async function writeAppointmentData(appointment) {
     studentId: appointment.student.userId,
     startTime: appointment.startTime.toISOString(),
     endTime: appointment.endTime.toISOString(),
-    description: appointment.description
+    description: appointment.description,
+    status: "pending" //new appointments will always have a pending status
   });
 
   return appointmentId;
 }
+
+async function updateAppointmentData(appointmentId, updatedData) {
+  if (!appointmentId) {
+    throw new Error('Appointment ID is required');
+  }
+
+  const appointmentRef = ref(db, `appointments/${appointmentId}`);
+
+  // Convert Date objects to ISO strings for storage
+  if (updatedData.startTime) {
+    updatedData.startTime = updatedData.startTime.toISOString();
+  }
+  if (updatedData.endTime) {
+    updatedData.endTime = updatedData.endTime.toISOString();
+  }
+
+  await update(appointmentRef, updatedData);
+}
+
+
+async function updateNotificationData(notifId, updatedData) {
+  if (!notifId) {
+    throw new Error('Notification ID is required');
+  }
+
+  const notifRef = ref(db, `notifications/${notifId}`);
+
+  await update(notifRef, updatedData);
+}
+
 
 
 
 async function getCurrentUser() {
   var userId = getCurrentUserId();
   if (userId == null) {
-    throw new Error('No user logged in');
+    return null;
   }
   return getUser(userId);
+}
 
-  
+async function writeNotificationData(notification) {
+  const notifRef = push(ref(db, 'notifications'));
+  const notifId = notifRef.key;
+
+  await set(notifRef, {
+    recipient: notification.recipient,
+    appointmentId: notification.appointmentId,
+    type: notification.type,
+    status: notification.status,
+    message: notification.message
+  });
+  return notifId;
+}
+
+async function deleteNotification(notifId) {
+  const notifRef = ref(db, `notifications/${notifId}`);
+  return set(notifRef, null);
+}
+
+
+async function writeReviewData(review) {
+  const reviewRef = push(ref(db, 'reviews'));
+  const reviewId = reviewRef.key;
+
+  await set(reviewRef, {
+    reviewer: review.reviewerId,
+    reviewed: review.reviewedId,
+    message: review.message,
+    stars: review.stars
+  });
+
+  return reviewId;
 }
 
 async function getUser(userId) {
@@ -95,13 +159,48 @@ async function getAppointment(appointmentId) {
     const startTime = new Date(appointmentData.startTime);
     const endTime = new Date(appointmentData.endTime);
     const description = appointmentData.description;
+    const status = appointmentData.status;
 
-    return new Appointment(tutor, student, startTime, endTime, description, appointmentId);
+    return new Appointment(tutor, student, startTime, endTime, description, status, appointmentId);
   } else {
     throw new Error('Appointment not found');
   }
 }
 
+
+
+async function getNotification(notifId) {
+  const notifRef = ref(db, 'notifications/' + notifId);
+  const snapshot = await get(notifRef);
+
+  if (snapshot.exists()) {
+    const notifData = snapshot.val();
+    const appointmentId = notifData.appointmentId;
+    const message = notifData.message;
+    const recipient = notifData.recipient;
+    const status = notifData.status;
+    const type = notifData.type;
+
+    return new Notification(appointmentId, recipient, message, type, status, notifId);
+  } else {
+    throw new Error('Notification not found');
+  }
+}
+
+
+
+async function getNotifications(userId) {
+  const notificationsRef = ref(db, 'notifications');
+  const snapshot = await get(
+    query(notificationsRef, orderByChild('recipient'), equalTo(userId))
+  );
+  const userNotifications = [];
+  for (const notifId in snapshot.val()) {
+    const notif = await getNotification(notifId);
+    userNotifications.push(notif);
+  }
+  return userNotifications;
+}
 
 
 async function getUserAppointments(userId) {
@@ -137,14 +236,11 @@ async function getTutors() {
     query(userRef, orderByChild('userType'), equalTo(UserType.TUTOR))
   )
 
-  console.log("Hello there")
   if (snapshot.exists()) {
     const userData = snapshot.val();
     console.log(userData)
     for (const userId in userData) {
-      console.log(userId)
       const tutor = await getUser(userId);
-      console.log(tutor)
       tutors.push(tutor);
     
     }
@@ -154,4 +250,4 @@ async function getTutors() {
 }
 
 
-export {writeUserData, writeAppointmentData, getCurrentUser, getUser, getTutors};
+export { deleteNotification, writeUserData, writeAppointmentData, writeNotificationData, getNotifications, getCurrentUser, getUser, getTutors, getAppointment, updateAppointmentData, updateNotificationData, writeReviewData};

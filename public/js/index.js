@@ -1,7 +1,6 @@
-import { User, UserType } from "./Model/user.js";
-import { createUser, signInUser, getCurrentUserId } from "./services/authServices.js";
+import { User, UserType } from "/model/user.js";
 import { writeUserData, getCurrentUser, getUser, getTutors} from "./services/databaseServices.js";
-import {Appointment} from "./Model/appointment.js";
+import {Appointment} from "./model/appointment.js";
 const signUpButton = document.getElementById('signUp');
 const signInButton = document.getElementById('signIn');
 const container = document.getElementById('container');
