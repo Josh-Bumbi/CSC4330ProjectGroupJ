@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         // Update the dropdown menu
         dropdownMenu.innerHTML = `
             <li><a class="dropdown-item" href="#">Manage Profile</a></li>
-            <li><a class="dropdown-item" href="#">Log Out</a></li>
+            <li><a class="dropdown-item" href="logout.html">Log Out</a></li>
         `;
     } else {
         // User not logged in, keep the original dropdown menu

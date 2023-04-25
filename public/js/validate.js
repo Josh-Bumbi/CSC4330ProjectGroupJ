@@ -1,6 +1,6 @@
 import { signInUser, createUser } from "./services/authServices.js";
 import { User, UserType } from "./model/user.js";
-import { writeUserData} from "./services/databaseServices.js";
+import { writeUserData, getCurrentUser} from "./services/databaseServices.js";
 const firstName = document.querySelector('#firstName');
 const uEmail = document.querySelector('#uEmail');
 const major = document.querySelector('#major');
@@ -58,9 +58,17 @@ signInForm.addEventListener('submit', function (e) {
 
   if(signInEmail && signInPassword && signInEmail.value != "" && signInPassword.value != "")
   {
-    signInUser(signInEmail.value, signInPassword.value).then((userId) => {
+    signInUser(signInEmail.value, signInPassword.value).then(async (userId) => {
       if (userId != null) {
-        window.location.href = 'StudentHome.html';
+        var user = await getCurrentUser();
+        if (user.userType == "student") {
+          window.location.href = 'StudentHome.html';
+        } else if (user.userType == "tutor") {
+          window.location.href = 'TutorHome.html';
+        } else if (user.userType == "admin") {
+          window.location.href = 'AdminHome.html';
+        }
+        
       }
     });
   } else {
