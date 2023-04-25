@@ -54,7 +54,7 @@ class Student extends User {
 
       var message = this.name + " has requested an appointment with you" + " from " + appointment.startTime + " to " + appointment.endTime + " on " + appointment.description + ".";
 
-      var notif = new Notification(appointmentId, this.userId, message, 'accept', 'unread');
+      var notif = new Notification(appointmentId, appointment.tutor.userId, message, 'accept', 'unread');
 
       await writeNotificationData(notif);
     }

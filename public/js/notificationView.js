@@ -114,10 +114,13 @@ async function createAcceptanceNotification(notificationData, appointment) {
         var messageText = `${user.name} has accepted your appointment on ${startDate.toDateString()} at ${startHour}:${startMinute} - ${endHour}:${endMinute}.  Message: ${message}.`;
 
         var notif = new Notification(appointment.appointmentId, "lFHl9aurtdXoY8Ta0n0tQ3hzDEq1", messageText, 'text', 'unread');
+
   
         await writeNotificationData(notif);
 
-
+        var messageText = `Please leave a review for your tutor, ${user.name}, for your ${startDate.toDateString()} appointment.`;
+        notif = new Notification(appointment.appointmentId, "lFHl9aurtdXoY8Ta0n0tQ3hzDEq1", messageText, 'review', 'unread');
+        await writeNotificationData(notif);
         location.reload();
 
     });
@@ -249,10 +252,10 @@ async function createRateAndReviewNotification(notificationData, appointment) {
 async function displayNotifications() {
     const notificationsContainer = document.getElementById('notifications');
 
-    user = getCurrentUser();
+    user = await getCurrentUser();
 
     //Get notifications from database
-    const notificationsData = await getNotifications("lFHl9aurtdXoY8Ta0n0tQ3hzDEq1");
+    const notificationsData = await getNotifications(user.userId);
 
 
 
