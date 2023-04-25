@@ -4,7 +4,7 @@ import {getCurrentUserId} from "./authServices.js";
 import {User, UserType, Admin, Student, Tutor} from "../model/user.js";
 import {Appointment} from "../model/appointment.js";
 import {Notification} from "../model/notification.js";
-
+import { Review } from "../model/review.js";
 const db = getDatabase(app);
 
 //If we had more time, would want to make writes done server-side with authentication instead of client-side
@@ -249,5 +249,26 @@ async function getTutors() {
   return tutors;
 }
 
+async function getAllReviews(userId) {
+  const reviews = [];
+  const reviewRef = ref(db, 'reviews');
 
-export { deleteNotification, writeUserData, writeAppointmentData, writeNotificationData, getNotifications, getCurrentUser, getUser, getTutors, getAppointment, updateAppointmentData, updateNotificationData, writeReviewData};
+  const snapshot = await get(
+    query(reviewRef, orderByChild('reviewed'), equalTo(userId))
+  );
+
+  if (snapshot.exists()) {
+    const reviewData = snapshot.val();
+    console.log(reviewData);
+    for (const reviewId in reviewData) {
+      const reviewInfo = reviewData[reviewId];
+      const review = new Review(reviewInfo.reviewer, reviewInfo.reviewed, reviewInfo.message, reviewInfo.stars, reviewId);
+      reviews.push(review);
+    }
+  }
+
+  return reviews;
+}
+
+
+export { getAllReviews, deleteNotification, writeUserData, writeAppointmentData, writeNotificationData, getNotifications, getCurrentUser, getUser, getTutors, getAppointment, updateAppointmentData, updateNotificationData, writeReviewData};

@@ -1,0 +1,94 @@
+.navbar {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#profileDropdown a {
+    display: block;
+}
+
+#upcomingSessions {
+    background-color: #f8f9fa;
+    width: 30%;
+    height: 90%;
+    border-radius: 10px;
+    overflow-y: scroll;
+    position: fixed;
+    top: 10%;
+    bottom: 10%;
+    left: 5%;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#reviewList {
+    background-color: #f8f9fa;
+    width: 30%;
+    height: 90%;
+    border-radius: 10px;
+    overflow-y: scroll;
+    position: fixed;
+    top: 10%;
+    bottom: 10%;
+    right: 5%;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.review-container {
+    background-color: #f8f9fa;
+    border: 2px solid #00E17E;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.review-container:hover {
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+.review-date {
+    font-weight: bold;
+    color: #00E17E;
+    margin-bottom: 5px;
+}
+
+.review-author,
+.review-text {
+    margin-bottom: 5px;
+}
+
+.session-container {
+    background-color: #f8f9fa;
+    border: 2px solid #00E17E;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.session-container:hover {
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+.session-date {
+    font-weight: bold;
+    color: #00E17E;
+    margin-bottom: 5px;
+}
+
+.session-time,
+.session-tutor,
+.session-description {
+    margin-bottom: 5px;
+}
+
+#reviewListItems {
+    list-style: none;
+    padding: 0;
+}
