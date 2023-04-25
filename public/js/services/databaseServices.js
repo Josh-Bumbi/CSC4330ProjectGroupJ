@@ -30,8 +30,8 @@ async function writeAppointmentData(appointment) {
   await set(appointmentRef, {
     tutorId: appointment.tutor.userId,
     studentId: appointment.student.userId,
-    startTime: appointment.startTime.toISOString(),
-    endTime: appointment.endTime.toISOString(),
+    startTime: appointment.startTime.toLocaleString(),
+    endTime: appointment.endTime.toLocaleString(),
     description: appointment.description,
     status: "pending" //new appointments will always have a pending status
   });

@@ -52,8 +52,8 @@ async function getAvailableTimes() {
 
     //get appointments for the selected date and tutor
     const tutorId = getTutorIdFromURL();
-    const lowerBound = new Date(document.getElementById('appointmentDate').value);
-
+    const lowerBound = new Date(new Date(document.getElementById('appointmentDate').value).setDate(new Date(document.getElementById('appointmentDate').value).getDate() + 1));
+    console.log(lowerBound);
     //get dates for filtering appointments (0:00 of selected date to 0:00 of next day)
     lowerBound.setHours(0,0,0,0)
     const upperBound = new Date();
@@ -97,8 +97,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (selectedSlot && description != "") {
             //get the selected time
             const selectedTime = selectedSlot.textContent; // will be in the format "9:00 AM", "10:00 AM", etc.
-            const appointmentDate = new Date(document.getElementById('appointmentDate').value);
-    
+            console.log(document.getElementById('appointmentDate').value)
+            const appointmentDate = new Date(document.getElementById('appointmentDate').value).setDate(new Date(document.getElementById('appointmentDate').value).getDate() + 1);
             //convert the selected time to a Date object
             const startTime = new Date(appointmentDate);
             const [hours, minutes] = selectedTime.split(':');
@@ -111,7 +111,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             //all appointments are 1 hour long
             const endTime = new Date(startTime);
             endTime.setHours(startTime.getHours() + 1);
-    
             const appointment = new Appointment(tutor, student, startTime, endTime, description);
             
             student.addAppointment(appointment).then(() => {
