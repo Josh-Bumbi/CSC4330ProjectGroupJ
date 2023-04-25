@@ -7,21 +7,34 @@
     <meta name="author" content="Joshua Villere">
     <title>Tutor Profile</title>
     <link rel="stylesheet" href="profilestyles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  
 </head>
 <script type="module" src="profile.js"></script>
 <body>
-    <p class="name" id="name"></p>
-    <p class="title">Tutor</p>
-    <p class="area" id="major"></p>
-    <p class="title">Rating</p>
-    <p class="name" hidden>1/5 ★☆☆☆☆</p>
-    <p class="name" hidden>2/5 ★★☆☆☆</p>
-    <p class="name" hidden>3/5 ★★★☆☆</p>
-    <p class="name" hidden>4/5 ★★★★☆</p>
-    <p class="name" hidden>5/5 ★★★★★</p>
-    <p class="times">This rating is based on <span></span> reviews</p>
-    <button type="button" class="button" onclick="alert('This would take you to the previous page.')">← Go Back</button>
-    <button type="button" id="makeApt" class="button2" hidden onclick="alert('This would take you to the scheduling page.')">Schedule Session</button>
+    <div id="navbar-placeholder"></div>
+    <div class="content-wrapper">
+        <main>
+            <p class="name" id="name"></p>
+            <p class="title">Tutor</p>
+            <p class="area" id="major"></p>
+            <p class="title">Rating</p>
+            <p class="name" hidden>1/5 ★☆☆☆☆</p>
+            <p class="name" hidden>2/5 ★★☆☆☆</p>
+            <p class="name" hidden>3/5 ★★★☆☆</p>
+            <p class="name" hidden>4/5 ★★★★☆</p>
+            <p class="name" hidden>5/5 ★★★★★</p>
+            <p class="times">This rating is based on <span></span> reviews</p>
+            <button type="button" class="button" onclick="alert('This would take you to the previous page.')">← Go Back</button>
+            <button type="button" id="makeApt" class="button2" hidden>Schedule Session</button>
+
+        </main>
+    </div>
     
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script type="module" src="./js/loadNavbar.js"></script>
 </body>
+
 </html>

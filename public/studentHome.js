@@ -27,7 +27,7 @@ function filterTutors() {
     var image = $("<img>").attr("src", "school_icon.png").addClass("img-thumbnail");
     imageContainer.append(image);
     // link on name will bring the student to the tutor's profile
-    var nameLink = $("<a>").attr("href", "profileTutor.html?id=$" + tutor.userId).text(tutor.name);
+    var nameLink = $("<a>").attr("href", "profileTutor.html?id=" + tutor.userId).text(tutor.name);
     var name = $("<h4>").append(nameLink).addClass("tutor-name");
     var subject = $("<p>").text(tutor.major).addClass("tutor-subject");
     var infoContainer = $("<div>").addClass("tutor-info");

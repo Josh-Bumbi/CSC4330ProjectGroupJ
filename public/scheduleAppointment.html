@@ -15,41 +15,54 @@
         }
 
         .tutor-details {
-            background-color: lightgray;
+            background-color: #f8f9fa;
+            border: 2px solid #00E17E;
             border-radius: 10px;
             padding: 20px;
             margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .calendar-container {
-            background-color: darkgray;
+            background-color: #f8f9fa;
+            border: 2px solid #00E17E;
             border-radius: 10px;
             padding: 20px;
             margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .time-slots-container {
-            background-color: lightgray;
+            background-color: #f8f9fa;
+            border: 2px solid #00E17E;
             border-radius: 10px;
             padding: 20px;
             overflow-y: scroll;
             max-height: 400px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .time-slot {
             display: inline-block;
             background-color: white;
-            border: 1px solid darkgray;
+            border: 1px solid #00E17E;
             border-radius: 5px;
             padding: 5px 10px;
             margin: 5px;
             cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .time-slot:hover {
+            background-color: #00E17E;
+            color: white;
+            border-color: #00E17E;
         }
 
         .time-slot.selected {
-            background-color: #007bff;
+            background-color: #009f5a;
             color: white;
-            border-color: #007bff;
+            border-color: #009f5a;
         }
     </style>
 </head>

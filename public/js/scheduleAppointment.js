@@ -42,7 +42,7 @@ function displayAvailableTimeSlots(timeSlots) {
 
 function getTutorIdFromURL() {
     const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('tutorId');
+    return urlParams.get('id');
 }
 
 

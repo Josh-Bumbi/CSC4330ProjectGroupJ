@@ -1,9 +1,41 @@
 import { getUser,getCurrentUser } from "./js/services/databaseServices.js";
 import { signInUser, logout } from "./js/services/authServices.js";
 
+function getIdFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('id');
+}
+
+
+
 var viewer;
-var user = await getCurrentUser();
-console.log(user)
+var currentUser = await getCurrentUser();
+var viewedUser = await getUser(getIdFromURL('id'));
+// console.log(user)
+
+
+
+
+
+
+var userName = viewedUser.name;
+var userMajor = viewedUser.major;
+document.getElementById('major').innerHTML = userMajor;
+document.getElementById('name').innerHTML = userName;
+
+var currentUserType = currentUser.userType;
+if (currentUserType == "student") {
+    document.getElementById('makeApt').hidden = false;
+
+    document.getElementById('makeApt').addEventListener('click', function () {
+
+        window.location.href = "scheduleAppointment.html?id=" + getIdFromURL('id');
+    });
+
+}
+console.log(currentUserType); 
+
+
 // // TESTING
 // signInUser("student1@lsu.edu", "Password12345!").then((userId) => {
 // 	console.log(userId.uid)
