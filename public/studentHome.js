@@ -46,6 +46,8 @@ async function displayUpcomingSessions(sessions) {
     var sessionContainer = document.createElement("div");
     sessionContainer.classList.add("session-container");
 
+    sessionContainer.classList.add(session.status)
+
     var date = new Date(session.startTime);
     
     //format dates
@@ -70,7 +72,7 @@ async function displayUpcomingSessions(sessions) {
     sessionInfo.classList.add("session-info");
 
     var sessionDate = document.createElement("h4");
-    sessionDate.textContent = dateString;
+    sessionDate.textContent = dateString + " (" + session.status + ")";
     sessionDate.classList.add("session-date");
 
     var sessionTime = document.createElement("p");
