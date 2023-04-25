@@ -245,7 +245,8 @@ async function getTutors() {
     const userData = snapshot.val();
     console.log(userData)
     for (const userId in userData) {
-      const tutor = await getUser(userId);
+      var tutorInfo = userData[userId];
+      const tutor = new Tutor(userId, tutorInfo.name, tutorInfo.email, tutorInfo.grade, tutorInfo.major);
       tutors.push(tutor);
     
     }
@@ -253,6 +254,37 @@ async function getTutors() {
 
   return tutors;
 }
+
+async function getAllUsers() {
+  const users = [];
+  const userRef = ref(db, 'users');
+
+  const snapshot = await get(
+    query(userRef)
+  )
+
+  if (snapshot.exists()) {
+    const userData = snapshot.val();
+    console.log(userData)
+    for (const userId in userData) {
+      var userInfo = userData[userId];
+      var user;
+      if (userInfo.userType == UserType.ADMIN) {
+        // user = new Admin(userId, userInfo.name, userInfo.email);
+        //do nothing
+      } else if (userInfo.userType == UserType.TUTOR) {
+        user = new Tutor(userId, userInfo.name, userInfo.email, userInfo.grade, userInfo.major);
+      } else if (userInfo.userType == UserType.STUDENT) {
+        user = new Student(userId, userInfo.name, userInfo.email, userInfo.grade, userInfo.major);
+      }
+      users.push(user);
+    
+    }
+  }
+
+  return users;
+}
+
 
 async function getAllReviews(userId) {
   const reviews = [];
