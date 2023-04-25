@@ -225,6 +225,11 @@ async function getUserAppointments(userId) {
     const appointment = await getAppointment(appointmentId);
     userAppointments.push(appointment);
   }
+
+  //sort appointments by start time
+  userAppointments.sort((a, b) => {
+    return a.startTime - b.startTime;
+  });
   return userAppointments;
 }
 
