@@ -72,7 +72,7 @@ async function updateNotificationData(notifId, updatedData) {
 
 
 async function getCurrentUser() {
-  var userId = getCurrentUserId();
+  var userId = await getCurrentUserId();
   if (userId == null) {
     return null;
   }

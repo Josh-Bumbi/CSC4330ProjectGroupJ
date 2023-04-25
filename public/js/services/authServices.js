@@ -1,5 +1,5 @@
 import app from './firebaseConfig.js';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/9.18.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from "https://www.gstatic.com/firebasejs/9.18.0/firebase-auth.js";
 
 
 const auth = getAuth(app);
@@ -10,6 +10,17 @@ const auth = getAuth(app);
 // but leaving it in for easy debugging 
 
 // Will return userid if user successfully created, null if there was an error
+
+async function logout() {
+    return signOut(auth).then(() => {
+        // Sign-out successful.
+        return true;
+    }).catch((error) => {
+        // An error happened.
+        window.alert(error.message);
+        return false;
+    });
+}
 async function createUser(email, password) {
     return createUserWithEmailAndPassword(auth, email, password).then((userCred) => {
         return userCred.user;
@@ -22,12 +33,18 @@ async function createUser(email, password) {
 }
 
 
-function getCurrentUserId() {
-    if (auth.currentUser == null) {
-        return null;
-    }
-        
-    return auth.currentUser.uid;
+async function getCurrentUserId() {
+    return new Promise((resolve, reject) => {
+        auth.onAuthStateChanged((currentUser) => {
+            if (currentUser == null) {
+                resolve(null);
+            } else {
+                resolve(currentUser.uid);
+            }
+        }, (error) => {
+            reject(error);
+        });
+    });
 }
 
 // Will return userid if user successfully logged, null if there was an error
@@ -45,5 +62,5 @@ async function signInUser(email, password) {
 }
 
 
-export {createUser, signInUser, getCurrentUserId};
+export {createUser, signInUser, getCurrentUserId, logout};
 

@@ -1,11 +1,75 @@
+import { signInUser, createUser } from "./services/authServices.js";
+import { User, UserType } from "./model/user.js";
+import { writeUserData} from "./services/databaseServices.js";
 const firstName = document.querySelector('#firstName');
-const lastName = document.querySelector('#lastName');
 const uEmail = document.querySelector('#uEmail');
+const major = document.querySelector('#major');
+const grade = document.querySelector('#grade');
+
 const password = document.querySelector('#password');
-const form = document.querySelector('#signupForm');
+const signUpForm = document.querySelector('#signupForm');
+
+
+const signInForm = document.querySelector('#signinForm');
+
 
 const isRequired = value => value === '' ? false : true;
 const isBetween = (length, min, max) => length < min || length > max ? false : true;
+
+signUpForm.addEventListener('submit', function (e) {
+  e.preventDefault();
+  //get the values of the inputs
+
+  const firstNameValue = firstName.value.trim();
+  const uEmailValue = uEmail.value.trim();
+  const majorValue = major.value.trim();
+  const gradeValue = grade.value.trim();
+  const passwordValue = password.value.trim();
+  //run through test functions for each input
+  if(checkFirstName()  && checkEmail() && checkPassword() && major.value != "" && grade.value != "")
+  {
+
+    var newUser  = new User(null, firstNameValue, uEmailValue, UserType.STUDENT, gradeValue, majorValue);
+
+    createUser(uEmailValue, passwordValue).then((user) => {
+        if (user != null) {
+            //User authentication was successful, push user data to database
+          newUser.userId = user.uid;
+          writeUserData(newUser).then( _ => {
+              window.alert("User successfully created!");
+              window.location.href = 'StudentHome.html';
+          })
+        }
+    })
+  } else {
+
+    alert("Please make sure the form is completely filled out.");
+  }
+
+});
+
+// const signInEmail = document.getElementById('signInEmail');
+// console.log(signInEmail)
+signInForm.addEventListener('submit', function (e) {
+  e.preventDefault();
+
+  const signInEmail = document.getElementById('signInEmail');
+  const signInPassword = document.getElementById('signInPass');
+
+  if(signInEmail && signInPassword && signInEmail.value != "" && signInPassword.value != "")
+  {
+    signInUser(signInEmail.value, signInPassword.value).then((userId) => {
+      if (userId != null) {
+        window.location.href = 'StudentHome.html';
+      }
+    });
+  } else {
+    alert("Please enter a valid email and password");
+  }
+
+});
+
+
 
 const debounce = (fn, delay = 500) =>
 {
@@ -21,16 +85,16 @@ const debounce = (fn, delay = 500) =>
   };
 };
 
-form.addEventListener('input', debounce(function (e)
+signUpForm.addEventListener('input', debounce(function (e)
 {
   switch(e.target.id)
   {
     case 'firstName':
       checkFirstName();
       break;
-    case 'lastName':
-      checkLastName();
-      break;
+    // case 'lastName':
+    //   checkLastName();
+    //   break;
     case 'uEmail':
       checkEmail();
       break;
@@ -141,9 +205,9 @@ const checkEmail = () =>
   {
     showError(uEmail, 'This field cannot be blank.');
   }
-  else if(!isEmailValid(email))
+  else if(!isEmailValid(email) || email.slice(-4) != '.edu')
   {
-    showError(uEmail, 'Email is not valid.')
+    showError(uEmail, 'University Email is not valid.')
   }
   else
   {
