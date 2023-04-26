@@ -68,6 +68,18 @@ async function updateNotificationData(notifId, updatedData) {
   await update(notifRef, updatedData);
 }
 
+async function updateUserData(userId, updatedData) {
+  if (!userId) {
+    throw new Error('User ID is required');
+  }
+
+  const userRef = ref(db, `users/${userId}`);
+
+  await update(userRef, updatedData);
+}
+
+
+
 
 
 
@@ -308,4 +320,4 @@ async function getAllReviews(userId) {
 }
 
 
-export { getAllReviews, deleteNotification, writeUserData, writeAppointmentData, writeNotificationData, getNotifications, getCurrentUser, getUser, getTutors, getAppointment, updateAppointmentData, updateNotificationData, writeReviewData};
+export { updateUserData, getAllReviews, deleteNotification, writeUserData, writeAppointmentData, writeNotificationData, getNotifications, getCurrentUser, getUser, getTutors, getAppointment, updateAppointmentData, updateNotificationData, writeReviewData};
