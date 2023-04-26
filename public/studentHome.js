@@ -15,7 +15,7 @@ subjectFilter.addEventListener("change", filterTutors);
 function filterTutors() {
   var selectedSubject = subjectFilter.value;
   var filteredTutors = tutorData.filter(function (tutor) {
-    return selectedSubject === "all subjects" || tutor.subject === selectedSubject;
+    return selectedSubject === "all subjects" || tutor.major === selectedSubject;
   });
 
   $("#tutorListItems").empty(); // clear previous list items

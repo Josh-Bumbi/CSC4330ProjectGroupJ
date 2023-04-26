@@ -67,10 +67,10 @@ async function displayUpcomingSessions(sessions) {
       sessionTime.classList.add("session-time");
   
       // need to get tutor name from db
-      var tutorObj = await getUser(session.tutor);
+      var studentObj = await getUser(session.student);
   
       var sessionTutor = document.createElement("p");
-      sessionTutor.textContent = "Tutor: " + tutorObj.name;
+      sessionTutor.textContent = "Student: " + studentObj.name;
       sessionTutor.classList.add("session-tutor");
   
       var sessionDescription = document.createElement("p");
