@@ -1,21 +1,15 @@
-import { getUser } from "./services/databaseServices.js";
+import { getCurrentUser, getUser } from "./services/databaseServices.js";
 import { signInUser } from "./services/authServices.js";
 import { Appointment} from "./model/appointment.js";
 var tutor;
 var student;
+const currUser = await getCurrentUser();
 
-// TESTING
-signInUser("student1@lsu.edu", "Password12345!").then((userId) => {
-	console.log(userId.uid)
-	getUser(userId.uid).then((user) => {
-		student = user;
-        console.log(user);
-	})
-
-});
-//END TESTING
-
-
+if (currUser.userType == "tutor") {
+    student = currUser;
+} else {
+    student = await getUser(getStudentIdFromURL());
+}
 
 function displayAvailableTimeSlots(timeSlots) {
     const availableTimeSlots = document.getElementById('availableTimeSlots');
@@ -45,6 +39,10 @@ function getTutorIdFromURL() {
     return urlParams.get('id');
 }
 
+function getStudentIdFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('studID');
+}
 
 async function getAvailableTimes() {
     //Every tutor will, by default, have available times from 9 AM to 5 PM (hourly)
@@ -86,75 +84,78 @@ async function getAvailableTimes() {
 
 
 
-document.addEventListener('DOMContentLoaded', async function () {
-    // Time slot selection 
+// Time slot selection 
+console.log("hello")
+const scheduleButton = document.getElementById('scheduleAppointment');
+scheduleButton.addEventListener('click', async function () {
+    const selectedSlot = document.querySelector('.time-slot.selected');
+    const description = document.getElementById('appointmentDescription').value;
+    //Check if a time slot is selected
+    if (selectedSlot && description != "") {
+        //get the selected time
+        const selectedTime = selectedSlot.textContent; // will be in the format "9:00 AM", "10:00 AM", etc.
+        console.log(document.getElementById('appointmentDate').value)
+        const appointmentDate = new Date(document.getElementById('appointmentDate').value).setDate(new Date(document.getElementById('appointmentDate').value).getDate() + 1);
+        //convert the selected time to a Date object
+        const startTime = new Date(appointmentDate);
+        const [hours, minutes] = selectedTime.split(':');
 
-    const scheduleButton = document.getElementById('scheduleAppointment');
-    scheduleButton.addEventListener('click', async function () {
-        const selectedSlot = document.querySelector('.time-slot.selected');
-        const description = document.getElementById('appointmentDescription').value;
-        //Check if a time slot is selected
-        if (selectedSlot && description != "") {
-            //get the selected time
-            const selectedTime = selectedSlot.textContent; // will be in the format "9:00 AM", "10:00 AM", etc.
-            console.log(document.getElementById('appointmentDate').value)
-            const appointmentDate = new Date(document.getElementById('appointmentDate').value).setDate(new Date(document.getElementById('appointmentDate').value).getDate() + 1);
-            //convert the selected time to a Date object
-            const startTime = new Date(appointmentDate);
-            const [hours, minutes] = selectedTime.split(':');
+        //convert the hours to 24 hour time
+        const ampm = selectedTime.slice(-2);
+        startTime.setHours(ampm === 'AM' ? parseInt(hours) % 12 : (parseInt(hours) % 12) + 12);
+        startTime.setMinutes(parseInt(minutes));
 
-            //convert the hours to 24 hour time
-            const ampm = selectedTime.slice(-2);
-            startTime.setHours(ampm === 'AM' ? parseInt(hours) % 12 : (parseInt(hours) % 12) + 12);
-            startTime.setMinutes(parseInt(minutes));
-    
-            //all appointments are 1 hour long
-            const endTime = new Date(startTime);
-            endTime.setHours(startTime.getHours() + 1);
-            const appointment = new Appointment(tutor, student, startTime, endTime, description);
-            
-            student.addAppointment(appointment).then(() => {
+        //all appointments are 1 hour long
+        const endTime = new Date(startTime);
+        endTime.setHours(startTime.getHours() + 1);
+        const appointment = new Appointment(tutor, student, startTime, endTime, description);
+        
+        student.addAppointment(appointment).then(() => {
+            if (currUser.userType == "student") {
                 window.location.href = 'studentHome.html';
-            });
-    
+            } else {
+                window.location.href = 'adminHome.html';
+            }
             
-            
+        });
 
-        } else {
-            alert('Please select a time slot and enter a description.');
-        }
-    });
+        
+        
 
-
-
-    const datePicker = document.getElementById('appointmentDate');
-    const today = new Date().toISOString().substr(0, 10);
-    datePicker.setAttribute('min', today);
-
-    // Add an event listener to the date picker
-    datePicker.addEventListener('change', async function () {
-        const selectedDate = datePicker.value;
-
-        if (selectedDate) {
-            //Get available times for the tutor on the selected date
-            const availableTimes = await getAvailableTimes(selectedDate);
-
-            //Display the available time slots
-            displayAvailableTimeSlots(availableTimes);
-        }
-    });
-
-
-
-    // Tutor Info
-    const tutorId = getTutorIdFromURL();
-    tutor = await getUser(tutorId);
-
-    const tutorName = document.getElementById('tutorName');
-    tutorName.textContent = tutor.name;
-    
-    const tutorMajor = document.getElementById('tutorSubject');
-    tutorMajor.textContent = tutor.major;
-    
-
+    } else {
+        alert('Please select a time slot and enter a description.');
+    }
 });
+
+
+
+const datePicker = document.getElementById('appointmentDate');
+const today = new Date().toISOString().substr(0, 10);
+datePicker.setAttribute('min', today);
+
+// Add an event listener to the date picker
+datePicker.addEventListener('change', async function () {
+    const selectedDate = datePicker.value;
+
+    if (selectedDate) {
+        //Get available times for the tutor on the selected date
+        const availableTimes = await getAvailableTimes(selectedDate);
+
+        //Display the available time slots
+        displayAvailableTimeSlots(availableTimes);
+    }
+});
+
+
+
+// Tutor Info
+const tutorId = getTutorIdFromURL();
+tutor = await getUser(tutorId);
+console.log(tutor)
+const tutorName = document.getElementById('tutorName');
+tutorName.textContent = tutor.name;
+
+const tutorMajor = document.getElementById('tutorSubject');
+tutorMajor.textContent = tutor.major;
+
+

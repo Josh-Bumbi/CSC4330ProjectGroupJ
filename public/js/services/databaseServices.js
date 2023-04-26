@@ -79,10 +79,6 @@ async function updateUserData(userId, updatedData) {
 }
 
 
-
-
-
-
 async function getCurrentUser() {
   var userId = await getCurrentUserId();
   if (userId == null) {
@@ -108,6 +104,11 @@ async function writeNotificationData(notification) {
 async function deleteNotification(notifId) {
   const notifRef = ref(db, `notifications/${notifId}`);
   return set(notifRef, null);
+}
+
+async function deleteAppointment(appointmentId) {
+  const appointmentRef = ref(db, `appointments/${appointmentId}`);
+  return set(appointmentRef, null);
 }
 
 
@@ -298,6 +299,30 @@ async function getAllUsers() {
 }
 
 
+async function getAllAppointments() {
+  const appointments = [];
+  const appointmentRef = ref(db, 'appointments');
+
+  const snapshot = await get(
+    query(appointmentRef)
+  )
+
+  if (snapshot.exists()) {
+    const appointmentData = snapshot.val();
+    console.log(appointmentData)
+    for (const appointmentId in appointmentData) {
+      var appointmentInfo = appointmentData[appointmentId];
+      const appointment = new Appointment(appointmentInfo.tutorId, appointmentInfo.studentId, appointmentInfo.startTime, appointmentInfo.endTime, appointmentInfo.description, appointmentInfo.status, appointmentId);
+      appointments.push(appointment);
+    
+    }
+  }
+
+  return appointments;
+
+}
+
+
 async function getAllReviews(userId) {
   const reviews = [];
   const reviewRef = ref(db, 'reviews');
@@ -320,4 +345,4 @@ async function getAllReviews(userId) {
 }
 
 
-export { updateUserData, getAllReviews, deleteNotification, writeUserData, writeAppointmentData, writeNotificationData, getNotifications, getCurrentUser, getUser, getTutors, getAppointment, updateAppointmentData, updateNotificationData, writeReviewData};
+export { deleteAppointment, getAllAppointments, getAllUsers, updateUserData, getAllReviews, deleteNotification, writeUserData, writeAppointmentData, writeNotificationData, getNotifications, getCurrentUser, getUser, getTutors, getAppointment, updateAppointmentData, updateNotificationData, writeReviewData};

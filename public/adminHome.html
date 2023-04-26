@@ -7,117 +7,87 @@
     <title>Admin Page</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        #userList,
-        #appointmentList {
-            max-height: 300px;
-            overflow-y: auto;
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
         }
 
+        .container {
+            margin: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+        }
 
+        h1, h2 {
+            color: #00E17E;
+        }
+
+        .mb-3 {
+            margin-bottom: 1rem;
+        }
+
+        .mt-4 {
+            margin-top: 2rem;
+        }
         .navbar {
             padding-left: 10px;
             padding-right: 10px;
         }
 
-        .page-container {
-            margin: 20px;   
-        }   
-
-        .list-group {
-            margin-bottom: 20px;
-        }
-        body {
-            font-family: Arial, Helvetica, sans-serif;
+        .container {
+            margin: 20px;
             background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
         }
 
-        h1 {
-            text-align: center;
-            font-size: 2em;
-            font-weight: bold;
+        h1, h2 {
             color: #00E17E;
-            margin-bottom: 20px;
-        }
-
-        h2 {
-            text-align: center;
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #00E17E;
-            margin-bottom: 10px;
         }
 
     </style>
-</head>
-<body>
-    <div id="navbar-placeholder"></div>
-    <div class="container mt-5">
-        <h1 class="mb-5">Admin Page</h1>
-
-        <div class="row">
-            <div class="col-6">
-                <h3>Users</h3>
-                <div id="userList" class="list-group mb-3"></div>
-                <h3>Add User</h3>
-                <form>
-                    <div class="mb-3">
-                        <label>Name:</label>
-                        <input type="text" name="name" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label>Email:</label>
-                        <input type="email" name="email" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label>User Type:</label>
-                        <select name="userType" class="form-select">
-                            <option value="Student">Student</option>
-                            <option value="Tutor">Tutor</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Add User</button>
-                </form>
-            </div>
-            <div class="col-6">
-                <h3>Appointments</h3>
-                <div id="appointmentList" class="list-group mb-3"></div>
-                <h3>Add Appointment</h3>
-                <form>
-                    <div class="mb-3">
-                        <label>Student:</label>
-                        <input type="text" name="student" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label>Tutor:</label>
-                        <input type="text" name="tutor" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label>Date:</label>
-                        <input type="date" name="date" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label>Time:</label>
-                        <input type="time" name="time" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label>Status:</label>
-                        <select name="status" class="form-select">
-                            <option value="Pending">Pending</option>
-                            <option value="Accepted">Accepted</option>
-                            <option value="Cancelled">Cancelled</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Add Appointment</button>
-                </form>
-            </div>
-        </div>
-    </div>
-    </main>
-
+    <script src="./js/adminHome.js" type="module"></script>
+    <script src="./js/loadNavbar.js" type="module"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-    <script type="module" src="./js/loadNavbar.js"></script>
-    <script type="module" src="./js/adminHome.js"></script>
+</head>
+<body>
+    <div id="navbar-placeholder"></div>
+    <div class="d-flex justify-content-center">
+        <div class="container">
+            <h1 class="text-center">Admin Page</h1>
+            <h2 class="text-center mt-4">Tutoring Appointments</h2>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tutor</th>
+                        <th>Student</th>
+                        <th>Topic</th>
+                        <th class="dropdown">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="sessionTable">
+                </tbody>
+            </table>
+            <h2 class="text-center mt-4">Create Appointment</h2>
+            <form id="createAppointmentForm">
+                <div class="mb-3">
+                    <label for="studentSelect" class="form-label">Student</label>
+                    <select class="form-select" id="studentSelect">
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="tutorSelect" class="form-label">Tutor</label>
+                    <select class="form-select" id="tutorSelect">
+                    </select>
+                </div>
+                <button type="button" id="createAppointmentBtn" class="btn btn-primary">Create Appointment</button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

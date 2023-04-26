@@ -21,8 +21,10 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     if (user.userType == "student") {
         document.getElementById("home").setAttribute("href", "studentHome.html");
-    } else {
+    } if (user.userType == "tutor"){
         document.getElementById("home").setAttribute("href", "tutorHome.html");
+    } else {
+        document.getElementById("home").setAttribute("href", "adminHome.html");
     }
 
     const profileButton = document.getElementById('profileDropdown');
@@ -33,10 +35,20 @@ document.addEventListener('DOMContentLoaded', async function () {
         // profileButton.textContent = user.name;
 
         // Update the dropdown menu
-        dropdownMenu.innerHTML = `
+
+        if(user.userType != "admin"){
+            dropdownMenu.innerHTML = `
             <li><a class="dropdown-item" href="modifyProfile.html">Manage Profile</a></li>
             <li><a class="dropdown-item" href="logout.html">Log Out</a></li>
         `;
+        } else {
+            //change dropdwonMenu from dropdown to <button>
+            dropdownMenu.innerHTML = '<li><a class="dropdown-item" href="logout.html">Log Out</a></li>'
+            //remove notifcation button
+            document.getElementById("notif").remove();
+        }
+        
+        
     } else {
         // User not logged in, keep the original dropdown menu
         dropdownMenu.innerHTML = `

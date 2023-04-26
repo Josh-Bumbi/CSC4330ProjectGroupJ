@@ -1,123 +1,76 @@
 <!DOCTYPE html>
-<html>
-    <head>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
-    <title>Tutor Session</title>
-    <link rel="stylesheet"  href="view.css">
-    </head>
-    <body>
-    <h1>Tutor Session</h1>
-    <table>
-        <thead>
-        <tr>
-            <th>Date</th>
-            <th>Name</th>
-            <th>Time</th>
-            <th>Topic</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody id="sessionTable">
-        <tr>
-            <td>2023-04-25</td>
-            <td>professor1</td>
-            <td>14:00 - 15:00</td>
-            <td>Mathematics</td>
-            <td>
-            <button class="removeBtn" onclick="removeSession(this)">Remove</button>
-            </td>
-        </tr>
-        <tr>
-            <td>2023-04-27</td>
-            <td>professor2</td>
-            <td>16:00 - 17:00</td>
-            <td>English</td>
-            <td>
-            <button class="removeBtn" onclick="removeSession(this)">Remove</button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-
-    <h1>Waiting List</h1>
-
-    <table>
-        <thead>
-            <tr>
-            <th>Date</th>
-            <th>Name</th>
-            <th>Time</th>
-            <th>Topic</th>
-            <th>Status</th>
-            </tr>
-        </thead>
-        <tbody id="waitingListTable">
-            <tr>
-            <td>2023-04-25</td>
-            <td>professor1</td>
-            <td>14:00 - 15:00</td>
-            <td>Mathematics</td>
-            <td>
-                <select id="status" name="status">
-                <option value="pending">pending</option>
-                <option value="confirm">confirm</option>
-                </select>
-            </td>
-            </tr>
-            <tr>
-            <td>2023-04-27</td>
-            <td>professor2</td>
-            <td>16:00 - 17:00</td>
-            <td>English</td>
-            <td>
-                <select id="status" name="status">
-                <option value="pending">pending</option>
-                <option value="confirm">confirm</option>
-                </select>
-            </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <form onsubmit="insertSession(); return false;">
-        <label for="date">Date:</label>
-        <input type="date" id="date" required><br><br>
-        <label for="name">Name:</label>
-        <input type="name" id="name" required><br><br>
-        <label for="time">Time:</label>
-        <input type="time" id="time" required><br><br>
-        <label for="topic">Topic:</label>
-        <input type="text" id="topic" required><br><br>
-        <button type="submit">Add Session</button>
-    </form>
-    
-    <script>
-        function removeSession(button) {
-            if(!confirm('Are you sure to remove this session?')) {
-                button.preventDefault();
-		    }
-            var row = button.parentNode.parentNode;
-            row.parentNode.removeChild(row);
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
         }
-        
-        function insertSession() {
-            var table = document.getElementById("sessionTable");
-            var date = document.getElementById("date").value;
-            var name = document.getElementById("name").value;
-            var time = document.getElementById("time").value;
-            var topic = document.getElementById("topic").value;
-            var row = table.insertRow(-1);
-            var dateCell = row.insertCell(0);
-            var nameCell = row.insertCell(1)
-            var timeCell = row.insertCell(2);
-            var topicCell = row.insertCell(3);
-            var actionCell = row.insertCell(4);
-            dateCell.innerHTML = date;
-            nameCell.innerHTML = name;
-            timeCell.innerHTML = time;
-            topicCell.innerHTML = topic;
-            actionCell.innerHTML = '<button onclick="removeSession(this)">Remove</button>';
+
+        .container {
+            margin: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
         }
-    </script>
-    </body>
-</html>
+
+        h1, h2 {
+            color: #00E17E;
+        }
+
+        /* #createAppointmentBtn {
+            background-color: #00E17E;
+            border-color: #00E17E;
+        }
+
+        #createAppointmentBtn:hover {
+            background-color: #00b76b;
+            border-color: #00b76b; */
+        /* } */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Admin Page</h1>
+        <h2>Tutoring Appointments</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Tutor</th>
+                    <th>Student</th>
+                    <th>Topic</th>
+                    <th class="dropdown">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="sessionTable">
+            </tbody>
+        </table>
+        <h2>Create Appointment</h2>
+        <form id="createAppointmentForm">
+            <div class="mb-3">
+                <label for="studentSelect" class="form-label">Student</label>
+                <select class="form-select" id="studentSelect">
+                    <!-- Add student options here -->
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="tutorSelect" class="form-label">Tutor</label>
+                <select class="form-select" id="tutorSelect">
+                    <!-- Add tutor options here -->
+                </select>
+            </div>
+            <button type="button" id="createAppointmentBtn" class="btn btn-primary">Create Appointment</button>
+        </form>
+        <h2>Update Tutor Information</h2>
+        <form id="updateTutorForm">
+            <!-- Add fields for tutor information as needed -->
+            <button type="submit" class="btn btn-primary">Update Tutor</button>
+        </form>
+    </div>
